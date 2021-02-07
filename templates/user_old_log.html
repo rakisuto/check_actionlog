@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{props.title}}</title>
+    </head>
+    <body>
+        <div id="contents">
+            <p>{{props.msg}}</p>
+            <p>{{ name }}の過去ログ</p>
+        </div>
+        <hr>
+        <!--カレンダーから日付を指定する-->
+        <form action="/user/old_log" method="POST">
+        <label for="start">Start date:</label>
+            <input type="date" name="date" required pattern="\d{4}-\d{2}-\d{2}">
+            <span class="validity"></span>
+        </label>
+        <input type="submit" value="done">
+        </form>
+        <script>
+            //document.getElementById("calendar")
+        </script>
+        <hr>
+        <!--指定した日付のタイムラインを表示する
+        users_logテーブルからログインしているユーザ名,今日日付のレコード-->
+        <h3>{{ name }}の{{ dt }}のタイムライン</h3>
+        <div class="register_list">
+        {% if timeline | length == 0 %}
+        <div class="box">記録がありません。</div>
+        {% endif %}
+        {% for i in timeline %}
+        <div class="haiku">
+        <!--memo-->
+            {{ i[0] }}
+        <!--date-->
+            {{ i[1] }}
+        <!--time-->
+            {{ i[2] }}
+        </div>
+        {% endfor %}
+        </div>
+
+        <hr>
+        <a href="/user/home">もどる</a>
+    </body>
+</html>
