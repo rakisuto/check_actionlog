@@ -11,8 +11,8 @@
         <hr>
         <!--input id, password-->
         <form action="/register" method="POST">
-            名前:<br>
-            <input type="text" name="name" required><br>
+            名前(20文字以内):<br>
+            <input type="text" name="name" maxlength="20" required><br>
             <p style="line-height: 3;"></p>
             年齢(100歳以上の方はお断りします):<br>
             <input type="tel" name="age" maxlength="2" required><br>
@@ -23,8 +23,8 @@
                 <option value="女">♀</option>
             </select>
             <p style="line-height: 3;"></p>
-            パスワード(6~10文字以内):<br>
-            <input type="password" name="pwd" min="6" max="10" required><br>
+            パスワード(半角英数6~10文字以内):<br>
+            <input type="password" name="pwd" minlength="6" maxlength="10" autocomplete="off" required><br>
             <p style="line-height: 3;"></p>
             <input required type="submit" value="登録っっ('ω')ノ">
         </form>
