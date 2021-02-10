@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>{{props.title}}</title>
-    </head>
-    <body>
-        <div id="contents">
-            <p>{{props.msg}}</p>
-            <div id="loginform">
-            <form action="/login/try" method="POST">
+{%- extends "layout.html" %}
+{%- block content %}
+            <form action="/login/try" method="POST" class="login_form">
                 名前：<br>
                 <input type="text" name="name" required><br>
                 <p style="line-height: 3;"></p>
@@ -17,8 +9,7 @@
                 <p style="line-height: 3;"></p>
                 <input type="submit" value="ログインっっ('ω')ノ">
             </form>
-        </div>
-        <hr>
-        <a href="/">Home</a>
-    </body>
-</html>
+            <div class="return_url">
+            <a href="/">Home</a>
+            </div>
+{%- endblock %}

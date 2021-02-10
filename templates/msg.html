@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+      <meta charset="utf-8">
+      <link rel="stylesheet" href="../static/index.css" type="text/css">
+      <link rel="stylesheet" href="../static/return.css" type="text/css">
+      <script src="https://kit.fontawesome.com/254f38f32f.js" crossorigin="anonymous"></script>
+      <META http-equiv="Refresh" content="3;URL=index.html">
+      <title>{{props.title}}</title>
     </head>
-<body>
-        <div id="msg">{{ msg }}</div>
-        <ul>
-          <li><a href="/">かえれ</a></li>
-        </ul>
-</body>
+    <body>
+      <div id="contents">
+        <p class="props"><i class="fas fa-sticky-note"></i><span>{{props.msg}}</span></p>
+    </div>
+        <p class="return_msg">自動的にログイン画面に戻ります...</p>
+    </body>
 </html>

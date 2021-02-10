@@ -1,0 +1,77 @@
+.register_form {
+    text-align: center;
+    margin: 0 auto;
+}
+.login_form {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.return_url {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.nowtime {
+    text-align: center;
+}
+.add_log_form{
+    text-align: center;
+}
+
+.set_date {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+    padding: 2%;
+    background: linear-gradient(transparent 40%,#6ceff4 60%);
+}
+
+.user_log {
+    list-style: none;
+    padding: 20px 0 20px;
+    position: relative;
+    text-align: center;
+    border-style:groove;
+    border-radius: 10px;
+}
+.user_log:before {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  width: 3px;
+  background-color: #eeeeee;
+  left: 50%;
+  margin-left: -1.5px;
+}
+
+.user_log > li {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.user_log > li:before,
+.user_log > li:after {
+  display: table;
+}
+
+.user_log > li:after {
+  clear: both;
+}
+
+.user_log > li:before,
+.user_log > li:after {
+  display: table;
+}
+
+.user_log > li:after {
+  clear: both;
+}
+
+.log_time {
+    text-align: center;
+}
+

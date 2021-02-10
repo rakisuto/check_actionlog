@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>{{props.title}}</title>
-    </head>
-    <body>
-        <div id="contents">
-            <p>{{props.msg}}</p>
-        </div>
-        <hr>
-        <ul>
-            <li><a href="/hello">sign up</a></li>
-            <li><a href="/login">sign in</a></li>
-        </ul>
-    </body>
-</html>
+{%- extends "layout.html" %}
+{%- block content %}
+        <label class="btn-area">
+            <a href="/regist_user" class="btn">sign up</a>
+            <a href="/login" class="btn">sign in</a>
+        </label>
+{%- endblock %}
+

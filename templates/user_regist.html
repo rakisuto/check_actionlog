@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>{{props.title}}</title>
-    </head>
-    <body>
-        <div id="contents">
-            <p>{{props.msg}}</p>
-        </div>
-        <hr>
+{%- extends "layout.html" %}
+{%- block content %}
         <!--input id, password-->
-        <form action="/register" method="POST">
+        <form action="/register" method="POST" class="register_form">
             名前(20文字以内):<br>
             <input type="text" name="name" maxlength="20" required><br>
             <p style="line-height: 3;"></p>
@@ -28,8 +19,7 @@
             <p style="line-height: 3;"></p>
             <input required type="submit" value="登録っっ('ω')ノ">
         </form>
-        <ul>
-            <li><a href="/">Home</a></li>
-        </ul>
-    </body>
-</html>
+        <div class="return_url">
+            <a href="/">Home</a>
+        </div>
+{%- endblock %}
