@@ -8,10 +8,10 @@ dt_now = datetime.datetime.now()
 
 # DBとDBにログインするユーザの定義
 dns = {
-    'user': 'enix',
-    'host': 'localhost',
-    'password': 'enix',
-    'database': 'test'
+    'user': 'b43c007fae4cbb',
+    'host': 'us-cdbr-east-03.cleardb.com',
+    'password': '1a23f146',
+    'database': 'heroku_5c65651484c4266'
 }
 db = MySQL(**dns)
 
