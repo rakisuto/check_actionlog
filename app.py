@@ -1,17 +1,20 @@
 from flask import Flask, url_for, redirect, render_template, request, Markup, session
 from functools import wraps
 from DataStore.MySQL import MySQL
+from urllib.parse import urlparse
 import mysql.connector, re, os, time, datetime, hashlib, base64, random, string
 
 # 日付関数
 dt_now = datetime.datetime.now()
 
 # DBとDBにログインするユーザの定義
+url = urlparse('mysql://b43c007fae4cbb:1a23f146@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
 dns = {
-    'user': 'b43c007fae4cbb',
-    'host': 'us-cdbr-east-03.cleardb.com',
-    'password': '1a23f146',
-    'database': 'heroku_5c65651484c4266'
+    'port': url.port or '3306',
+    'user': url.username or 'b43c007fae4cbb',
+    'host': url.hostname or 'us-cdbr-east-03.cleardb.com',
+    'password': url.password or '1a23f146',
+    'database': url.path[1:] or 'heroku_5c65651484c4266'
 }
 db = MySQL(**dns)
 

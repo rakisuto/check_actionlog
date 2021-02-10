@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class MySQL:
     def __init__(self, **dns):
         self.dns = dns
