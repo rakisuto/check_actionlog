@@ -32,7 +32,7 @@ class MySQL:
         else:
             cursor = self.dbh.cursor()
             cursor.execute(stmt)
-        data = cursor.fetchall()
+        # data = cursor.fetchall()
         self.dbh.commit()
         cursor.close()
         return True
