@@ -143,7 +143,7 @@ def get_name():
 def retry_login():
     for i in range(MAX_RETRY + 1):
         if is_login():
-            return True
+            return session['login']
         else:
             sleep_sec = 2 ** i
             time.sleep(sleep_sec)
