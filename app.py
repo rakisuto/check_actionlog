@@ -1,10 +1,7 @@
 from flask import Flask, url_for, redirect, render_template, request, Markup, session
 from functools import wraps
 from DataStore.MySQL import MySQL
-from urllib.parse import urlparse
-import sys, mysql.connector, re, os, time, datetime, hashlib, base64, random, string
-# 追加
-from mysql.connector.constants import ClientFlag
+import sys, re, os, time, datetime, hashlib, base64, random, string
 
 # 日付関数
 dt_now = datetime.datetime.now()
@@ -21,22 +18,6 @@ elif os.name == 'posix':
     ca_path = os.path.join(dirname, 'opt/mysql/ssl/ca.pem')
     cert_path = os.path.join(dirname, 'opt/mysql/ssl/client-cert.pem')
     key_path = os.path.join(dirname, 'opt/mysql/ssl/client-key.pem')
-
-# DBとDBにログインするユーザの定義
-url = urlparse('mysql://b43c007fae4cbb:641f32al@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
-dns = {
-    'port': url.port or '3306',
-    'user': url.username or 'b43c007fae4cbb',
-    'host': url.hostname or 'us-cdbr-east-03.cleardb.com',
-    'password': url.password or '641f32al',
-    'database': url.path[1:] or 'heroku_5c65651484c4266',
-    # 以下追加した。
-    'client_flags': [ClientFlag.SSL],
-    'ssl_ca': ca_path,
-    'ssl_cert': cert_path,
-    'ssl_key': key_path
-}
-db = MySQL(**dns)
 
 # ランダム文字列生成
 def randomname(n):
@@ -60,7 +41,8 @@ def verify_password(pwd, hash):
     salt, digest_v = b[:16], b[16:]
     digest_n = hashlib.pbkdf2_hmac('sha256',
             pwd.encode('utf-8'), salt, 10000)
-    return digest_n == digest_v
+    return digest_v, digest_n
+    #return digest_n == digest_v
 
 # ログイン画面
 @app.route('/')
@@ -93,15 +75,16 @@ def register():
         props = {'title': 'failed sign up', 'msg': 'ユーザの登録に失敗しました。'}
         return render_template('msg.html', props=props)
 
+
 # DBにユーザ追加
 def add_user(name, age, gender, pwd):
     # 別モジュールに渡すことに。
-    stmt = 'INSERT INTO users (name, age, gender, password) VALUES (?, ?, ?, ?)'
-    reg = db.ins_query(stmt, name, age, gender, pwd, prepared=True)
+    stmt = 'INSERT INTO users (name, age, gender, password) VALUES (%s, %s, %s, %s)'
+    reg = MySQL.ins_query(stmt, name, age, gender, pwd)
     if reg:
         return True
     else:
-        return False
+        return reg
 
 # ログイン画面に遷移
 @app.route('/login')
@@ -122,6 +105,7 @@ def login_try():
         props = {'title': 'login failed', 'msg': 'ログインに失敗しました。ユーザ名かパスワードが誤っています'}
         return render_template('msg.html', props=props)
 
+
 # ログイン成功→ユーザーHOME画面
 @app.route('/user/home')
 def login_success():
@@ -132,11 +116,11 @@ def login_success():
 
 # DBからログイン情報参照 レコードのCOUNT結果で存在有無を判断する！
 def check_user(name, pwd):
-    stmt = 'SELECT COUNT(*) FROM users WHERE name=?'
-    log = db.query(stmt, name, prepared=True)
+    stmt = 'SELECT COUNT(*) FROM users WHERE name=%s'
+    log = MySQL.query(stmt, name)
     if 1 in log[0]:
-        stmt = 'SELECT password FROM users WHERE name=?'
-        hash_pwd = db.query(stmt, name, prepared=True)
+        stmt = 'SELECT password FROM users WHERE name=%s'
+        hash_pwd = MySQL.query(stmt, name)
         return verify_password(str(pwd), str(hash_pwd[0]))
     else:
         return False
@@ -182,8 +166,8 @@ def check_old_log():
     dt = get_today()
     props = {'title': 'user old log', 'msg': '過去の記録確認'}
     stmt = 'SELECT memo, dt, tm FROM users_log\
-            WHERE name = ? AND dt = cast(now() as date)'
-    timeline = db.query(stmt, name, prepared=True)
+            WHERE name = %s AND dt = cast(now() as date)'
+    timeline = MySQL.query(stmt, name)
     return render_template('user_old_log.html',
             name=name, dt=dt,timeline=timeline, props=props)
 
@@ -195,8 +179,8 @@ def check_calendar():
     dt = request.form.get('date')
     props = {'title': 'user old log', 'msg': '過去の記録確認'}
     stmt = 'SELECT memo, dt, tm FROM users_log\
-            WHERE name = ? AND dt = ?'
-    timeline = db.query(stmt, name, dt, prepared=True)
+            WHERE name = %s AND dt = %s'
+    timeline = MySQL.query(stmt, name, dt)
     return render_template('user_old_log.html',
             name=name, dt=dt, timeline=timeline, props=props)
 
@@ -218,8 +202,8 @@ def write_log():
     tm = get_time()
     props = {'title': 'success write log', 'msg': '記録出来ました！この調子！'}
     stmt = 'INSERT INTO users_log values\
-            (?, ?, ?, ?);'
-    write_log = db.ins_query(stmt, name, memo, dt, tm, prepared=True)
+            (%s, %s, %s, %s);'
+    write_log = MySQL.ins_query(stmt, name, memo, dt, tm)
     return render_template('user_add_log.html',
             name=name, memo=memo, dt=dt, tm=tm, props=props)
 
