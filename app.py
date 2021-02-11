@@ -19,9 +19,9 @@ dns = {
     'database': url.path[1:] or 'heroku_5c65651484c4266',
     # 以下追加した。
     'client_flags': [ClientFlag.SSL],
-    'ssl_ca': '/opt/mysql/ssl/ca.pem',
-    'ssl_cert': '/opt/mysql/ssl/client-cert.pem',
-    'ssl_key': '/opt/mysql/ssl/client-key.pem'
+    'ssl_ca': '/opt/mysql/ssl/cleardb-ca.pem',
+    'ssl_cert': '/opt/mysql/ssl/b43c007fae4cbb-cert.pem',
+    'ssl_key': '/opt/mysql/ssl/b43c007fae4cbb-key.pem'
 }
 db = MySQL(**dns)
 
