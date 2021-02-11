@@ -1,11 +1,13 @@
-import pymysql
+# import mysql.connector
 import pymysql.cursors
+# from mysql.connector.constants import ClientFlag
 
-conn = pymysql.connect(host='us-cdbr-east-03.cleardb.com',
-                    user='b43c007fae4cbb',
-                    password='641f32al',
-                    db='heroku_5c65651484c4266',
+conn = pymysql.connect(host='localhost',
+                    user='enix',
+                    password='enix',
+                    db='test',
                     charset='utf8mb4'
+                    #cursorclass=pymysql.cursors.DictCursor
                     )
 
 
