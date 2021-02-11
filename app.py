@@ -132,9 +132,7 @@ def is_login():
 
 # ユーザ名の取得
 def get_name():
-    return session["login"]
-    if not is_login():
-        'not login'
+    return session['login'] if is_login() else 'None'
 
 
 # ログアウト処理
