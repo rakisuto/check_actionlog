@@ -11,9 +11,16 @@ dt_now = datetime.datetime.now()
 
 # 証明書のディレクトリ指定
 dirname = os.getcwd()
-ca_path = os.path.join(dirname, 'opt\\mysql\\ssl\\ca.pem')
-cert_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-cert.pem')
-key_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-key.pem')
+if os.name == 'nt':
+    print("on windows")
+    ca_path = os.path.join(dirname, 'opt\\mysql\\ssl\\ca.pem')
+    cert_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-cert.pem')
+    key_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-key.pem')
+elif os.name == 'posix':
+    print("on mac or linux")
+    ca_path = os.path.join(dirname, 'opt/mysql/ssl/ca.pem')
+    cert_path = os.path.join(dirname, 'opt/mysql/ssl/client-cert.pem')
+    key_path = os.path.join(dirname, 'opt/mysql/ssl/client-key.pem')
 
 # DBとDBにログインするユーザの定義
 url = urlparse('mysql://b43c007fae4cbb:641f32al@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
