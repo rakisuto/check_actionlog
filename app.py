@@ -3,18 +3,25 @@ from functools import wraps
 from DataStore.MySQL import MySQL
 from urllib.parse import urlparse
 import mysql.connector, re, os, time, datetime, hashlib, base64, random, string
+# 追加
+from mysql.connector.constants import ClientFlag
 
 # 日付関数
 dt_now = datetime.datetime.now()
 
 # DBとDBにログインするユーザの定義
-url = urlparse('mysql://b43c007fae4cbb:1a23f146@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
+url = urlparse('mysql://b43c007fae4cbb:641f32al@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
 dns = {
     'port': url.port or '3306',
     'user': url.username or 'b43c007fae4cbb',
     'host': url.hostname or 'us-cdbr-east-03.cleardb.com',
-    'password': url.password or '1a23f146',
-    'database': url.path[1:] or 'heroku_5c65651484c4266'
+    'password': url.password or '641f32al',
+    'database': url.path[1:] or 'heroku_5c65651484c4266',
+    # 以下追加した。
+    'client_flags': [ClientFlag.SSL],
+    'ssl_ca': '/opt/mysql/ssl/ca.pem',
+    'ssl_cert': '/opt/mysql/ssl/client-cert.pem',
+    'ssl_key': '/opt/mysql/ssl/client-key.pem'
 }
 db = MySQL(**dns)
 
