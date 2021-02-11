@@ -128,11 +128,11 @@ def check_user(name, pwd):
 
 # セッション管理
 def is_login():
-    return 'login' in session
+    return "login" in session
 
 # ユーザ名の取得
 def get_name():
-    return session['login']
+    return session["login"]
     if not is_login():
         'not login'
 
