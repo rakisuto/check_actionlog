@@ -1,5 +1,5 @@
 import mysql.connector
-
+from mysql.connector.constants import ClientFlag
 
 class MySQL:
     def __init__(self, **dns):

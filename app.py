@@ -2,12 +2,18 @@ from flask import Flask, url_for, redirect, render_template, request, Markup, se
 from functools import wraps
 from DataStore.MySQL import MySQL
 from urllib.parse import urlparse
-import mysql.connector, re, os, time, datetime, hashlib, base64, random, string
+import sys, mysql.connector, re, os, time, datetime, hashlib, base64, random, string
 # 追加
 from mysql.connector.constants import ClientFlag
 
 # 日付関数
 dt_now = datetime.datetime.now()
+
+# 証明書のディレクトリ指定
+dirname = os.getcwd()
+ca_path = os.path.join(dirname, 'opt\\mysql\\ssl\\ca.pem')
+cert_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-cert.pem')
+key_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-key.pem')
 
 # DBとDBにログインするユーザの定義
 url = urlparse('mysql://b43c007fae4cbb:641f32al@us-cdbr-east-03.cleardb.com:3306/heroku_5c65651484c4266')
@@ -19,9 +25,9 @@ dns = {
     'database': url.path[1:] or 'heroku_5c65651484c4266',
     # 以下追加した。
     'client_flags': [ClientFlag.SSL],
-    'ssl_ca': '/opt/mysql/ssl/cleardb-ca.pem',
-    'ssl_cert': '/opt/mysql/ssl/b43c007fae4cbb-cert.pem',
-    'ssl_key': '/opt/mysql/ssl/b43c007fae4cbb-key.pem'
+    'ssl_ca': ca_path,
+    'ssl_cert': cert_path,
+    'ssl_key': key_path
 }
 db = MySQL(**dns)
 
