@@ -6,6 +6,7 @@ import sys, re, os, time, datetime, hashlib, base64, random, string
 # 日付関数
 dt_now = datetime.datetime.now()
 
+'''
 # 証明書のディレクトリ指定
 dirname = os.getcwd()
 if os.name == 'nt':
@@ -18,6 +19,10 @@ elif os.name == 'posix':
     ca_path = os.path.join(dirname, 'opt/mysql/ssl/ca.pem')
     cert_path = os.path.join(dirname, 'opt/mysql/ssl/client-cert.pem')
     key_path = os.path.join(dirname, 'opt/mysql/ssl/client-key.pem')
+'''
+
+# ログイン処理のリトライ回数上限
+MAX_RETRY = 3
 
 # ランダム文字列生成
 def randomname(n):
@@ -128,11 +133,22 @@ def check_user(name, pwd):
 
 # セッション管理
 def is_login():
-    return "login" in session
+    return 'login' in session
 
 # ユーザ名の取得
 def get_name():
-    return session['login'] if is_login() else 'None'
+    return session['login'] if is_login() else retry_login()
+
+# ログインリトライ処理
+def retry_login():
+    for i in range(MAX_RETRY + 1):
+        if is_login():
+            return True
+        else:
+            sleep_sec = 2 ** i
+            time.sleep(sleep_sec)
+
+
 
 
 # ログアウト処理
