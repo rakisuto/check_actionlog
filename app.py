@@ -138,7 +138,7 @@ def is_login():
 def retry_login():
     for i in range(MAX_RETRY + 1):
         result = is_login()
-        print(result, file=open('file.txt', 'w'))
+        sys.stdout.write(result)
         if result != None:
             return session['login']
         else:
