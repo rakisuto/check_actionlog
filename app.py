@@ -132,6 +132,7 @@ def check_user(name, pwd):
 
 # セッション管理
 def is_login():
+    sys.stdout.write(str(session))
     return 'login' in session
 
 # ログインリトライ処理
