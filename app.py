@@ -147,10 +147,7 @@ def retry_login():
 
 # ユーザ名の取得
 def get_name():
-    if is_login():
-        return session['login']
-    else:
-        retry_login()
+    return session['login'] if is_login() else retry_login()
 
 
 
