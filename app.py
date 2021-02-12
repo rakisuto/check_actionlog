@@ -37,8 +37,7 @@ def main():
 @app.route('/regist_user')
 def regist_user():
     props = {'title': 'sign up', 'msg': 'ユーザ登録'}
-    html = render_template('user_regist.html', props=props)
-    return html
+    return  render_template('user_regist.html', props=props)
 
 # ユーザー登録
 @app.route('/register', methods=['POST'])
@@ -61,7 +60,7 @@ def register():
             props = {'title': 'failed sign up', 'msg': 'ユーザの登録に失敗しました。'}
             return render_template('msg.html', props=props)
     else:
-        props = {'title': 'user duplicate', 'msg': '同名のユーザが存在します。気が合いますね。'}
+        props = {'title': 'user duplicate', 'msg': '同名のユーザが存在します。考え直してください。'}
         return render_template('msg.html', props=props)
 
 # ユーザ名が重複しないか確認
