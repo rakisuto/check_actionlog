@@ -34,7 +34,7 @@ def randomname(n):
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = 'TIIDe5TUMtPUHpyu'
 
 # saltの生成＆パスワードへの付与
 def gen_password(pwd):
