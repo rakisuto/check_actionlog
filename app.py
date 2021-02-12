@@ -167,7 +167,7 @@ def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         search_session = get_name()
-        if search_session == None:
+        if search_session == 'None':
             return redirect('/login')
         return func(*args, **kwargs)
     return wrapper
