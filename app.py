@@ -46,8 +46,7 @@ def verify_password(pwd, hash):
     salt, digest_v = b[:16], b[16:]
     digest_n = hashlib.pbkdf2_hmac('sha256',
             pwd.encode('utf-8'), salt, 10000)
-    return digest_v, digest_n
-    #return digest_n == digest_v
+    return digest_n == digest_v
 
 # ログイン画面
 @app.route('/')
@@ -147,11 +146,10 @@ def retry_login():
 
 # ユーザ名の取得
 def get_name():
-    return session['login'] if is_login() else retry_login()
-
-
-
-
+    if is_login():
+        return session['login']
+    else:
+        return retry_login()
 
 # ログアウト処理
 @app.route('/logout')
