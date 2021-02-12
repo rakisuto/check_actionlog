@@ -22,7 +22,7 @@ elif os.name == 'posix':
 '''
 
 # ログイン処理のリトライ回数上限
-MAX_RETRY = 10
+MAX_RETRY = 5
 
 # ランダム文字列生成
 def randomname(n):
@@ -135,6 +135,16 @@ def check_user(name, pwd):
 def is_login():
     return 'login' in session
 
+# ログインリトライ処理
+def retry_login():
+    for i in range(MAX_RETRY + 1):
+        result = is_login()
+        if result != None:
+            return session['login']
+        else:
+            sleep_sec = 2 ** i
+            time.sleep(sleep_sec)
+
 # ユーザ名の取得
 def get_name():
     if is_login():
@@ -142,14 +152,6 @@ def get_name():
     else:
         retry_login()
 
-# ログインリトライ処理
-def retry_login():
-    for i in range(MAX_RETRY + 1):
-        if is_login():
-            return session['login']
-        else:
-            sleep_sec = 2 ** i
-            time.sleep(sleep_sec)
 
 
 
