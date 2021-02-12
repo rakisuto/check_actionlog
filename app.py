@@ -139,7 +139,7 @@ def retry_login():
     for i in range(MAX_RETRY + 1):
         result = is_login()
         sys.stdout.write(str(result))
-        if result != None:
+        if result:
             return session['login']
         else:
             sleep_sec = 2 ** i
