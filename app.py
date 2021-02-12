@@ -137,7 +137,7 @@ def check_user(name, pwd):
 def is_login():
     sys.stdout.write(str(session))
     return 'login' in session
-
+'''
 # ログインリトライ処理
 def retry_login():
     for i in range(MAX_RETRY + 1):
@@ -150,13 +150,11 @@ def retry_login():
             time.sleep(sleep_sec)
             if i == MAX_RETRY:
                 return 'None'
+'''
 
 # ユーザ名の取得
 def get_name():
-    if is_login():
-        return session['login']
-    else:
-        return retry_login()
+    return session['login']
 
 # ログアウト処理
 @app.route('/logout')
