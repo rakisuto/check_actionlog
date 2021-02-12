@@ -1,6 +1,7 @@
 from flask import Flask, url_for, redirect, render_template, request, Markup, session
 from functools import wraps
 from DataStore.MySQL import MySQL
+from datetime import timedelta
 import sys, re, os, time, datetime, hashlib, base64, random, string
 
 # 日付関数
@@ -24,14 +25,16 @@ elif os.name == 'posix':
 # ログイン処理のリトライ回数上限
 MAX_RETRY = 3
 
+'''
 # ランダム文字列生成
 def randomname(n):
     randlst = [random.choice(string.ascii_letters + string.digits) for i in range(n)]
     return ''.join(randlst)
+'''
 
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
-app.secret_key = randomname(16)
+app.secret_key = os.urandom(24)
 
 # saltの生成＆パスワードへの付与
 def gen_password(pwd):
@@ -170,8 +173,7 @@ def try_logout():
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        search_session = get_name()
-        if search_session == 'None':
+        if not is_login():
             return redirect('/login')
         return func(*args, **kwargs)
     return wrapper
