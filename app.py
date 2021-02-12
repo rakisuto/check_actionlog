@@ -139,7 +139,7 @@ def is_login():
 def retry_login():
     for i in range(MAX_RETRY + 1):
         result = is_login()
-        sys.stdout.write(str(result), str(session))
+        sys.stdout.write(str(result))
         if result:
             return session['login']
         else:
