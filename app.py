@@ -2,39 +2,15 @@ from flask import Flask, url_for, redirect, render_template, request, Markup, se
 from functools import wraps
 from DataStore.MySQL import MySQL
 from datetime import timedelta
-import sys, re, os, time, datetime, hashlib, base64, random, string
+import sys, re, os, time, datetime, hashlib, base64, random, string, ini
+
 
 # 日付関数
 dt_now = datetime.datetime.now()
 
-'''
-# 証明書のディレクトリ指定
-dirname = os.getcwd()
-if os.name == 'nt':
-    print("on windows")
-    ca_path = os.path.join(dirname, 'opt\\mysql\\ssl\\ca.pem')
-    cert_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-cert.pem')
-    key_path = os.path.join(dirname, 'opt\\mysql\\ssl\\client-key.pem')
-elif os.name == 'posix':
-    print("on mac or linux")
-    ca_path = os.path.join(dirname, 'opt/mysql/ssl/ca.pem')
-    cert_path = os.path.join(dirname, 'opt/mysql/ssl/client-cert.pem')
-    key_path = os.path.join(dirname, 'opt/mysql/ssl/client-key.pem')
-'''
-
-# ログイン処理のリトライ回数上限
-MAX_RETRY = 3
-
-'''
-# ランダム文字列生成
-def randomname(n):
-    randlst = [random.choice(string.ascii_letters + string.digits) for i in range(n)]
-    return ''.join(randlst)
-'''
-
 # Flaskインスタンスと暗号化キーの指定
 app = Flask(__name__)
-app.secret_key = 'TIIDe5TUMtPUHpyu'
+app.secret_key = ini.ini_key
 
 # saltの生成＆パスワードへの付与
 def gen_password(pwd):
@@ -73,19 +49,32 @@ def register():
     pwd = request.form.get('pwd')
     # パスワードはハッシュ化する
     hash_pwd = gen_password(pwd)
-    # ユーザーを追加
-    add_result = add_user(name, age, gender, hash_pwd)
-    if add_result:
-        props = {'title': 'success sign up', 'msg': 'ユーザを登録しました！'}
-        return render_template('msg.html', props=props)
+    # DBに同名ユーザがいないかチェック
+    result = check_duplicate(name)
+    if result:
+        # ユーザーを追加
+        add_result = add_user(name, age, gender, hash_pwd)
+        if add_result:
+            props = {'title': 'success sign up', 'msg': 'ユーザを登録しました！'}
+            return render_template('msg.html', props=props)
+        else:
+            props = {'title': 'failed sign up', 'msg': 'ユーザの登録に失敗しました。'}
+            return render_template('msg.html', props=props)
     else:
-        props = {'title': 'failed sign up', 'msg': 'ユーザの登録に失敗しました。'}
+        props = {'title': 'user duplicate', 'msg': '同名のユーザが存在します。気が合いますね。'}
         return render_template('msg.html', props=props)
 
+# ユーザ名が重複しないか確認
+def check_duplicate(name):
+    stmt = 'SELECT COUNT(*) FROM users WHERE name=%s'
+    log = MySQL.query(stmt, name)
+    if not 1 in log[0]:
+        return True
+    else:
+        return False
 
 # DBにユーザ追加
 def add_user(name, age, gender, pwd):
-    # 別モジュールに渡すことに。
     stmt = 'INSERT INTO users (name, age, gender, password) VALUES (%s, %s, %s, %s)'
     reg = MySQL.ins_query(stmt, name, age, gender, pwd)
     if reg:
@@ -135,22 +124,7 @@ def check_user(name, pwd):
 
 # セッション管理
 def is_login():
-    sys.stdout.write(str(session))
     return 'login' in session
-'''
-# ログインリトライ処理
-def retry_login():
-    for i in range(MAX_RETRY + 1):
-        result = is_login()
-        sys.stdout.write(str(result))
-        if result:
-            return session['login']
-        else:
-            sleep_sec = 2 ** i
-            time.sleep(sleep_sec)
-            if i == MAX_RETRY:
-                return 'None'
-'''
 
 # ユーザ名の取得
 def get_name():

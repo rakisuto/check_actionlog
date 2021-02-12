@@ -1,10 +1,14 @@
 import pymysql
 import pymysql.cursors
+import sys
 
-conn = pymysql.connect(host='us-cdbr-east-03.cleardb.com',
-                    user='b43c007fae4cbb',
-                    password='641f32al',
-                    db='heroku_5c65651484c4266',
+sys.path.append('../../')
+import ini
+
+conn = pymysql.connect(host=ini.ini_host,
+                    user=ini.ini_user,
+                    password=ini.ini_pass,
+                    db=ini.ini_db,
                     charset='utf8mb4'
                     )
 
