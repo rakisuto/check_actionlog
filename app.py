@@ -22,7 +22,7 @@ elif os.name == 'posix':
 '''
 
 # ログイン処理のリトライ回数上限
-MAX_RETRY = 5
+MAX_RETRY = 3
 
 # ランダム文字列生成
 def randomname(n):
