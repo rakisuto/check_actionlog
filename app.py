@@ -144,6 +144,8 @@ def retry_login():
         else:
             sleep_sec = 2 ** i
             time.sleep(sleep_sec)
+            if i == MAX_RETRY:
+                return 'None'
 
 # ユーザ名の取得
 def get_name():
